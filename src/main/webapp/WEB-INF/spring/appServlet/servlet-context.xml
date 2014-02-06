@@ -11,6 +11,9 @@
 		http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.1.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd ">
 		
+	
+	<!-- Import properties  -->
+	<util:properties id="config_crypto" location="classpath:crypto-properties.xml" />
 		
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -29,21 +32,66 @@
 	
 	<context:component-scan base-package="com.fiadot.springjsoncrypt" />
 	
+	<!-- Crypt -->
+	<bean id="cryptoUtil" class="com.fiadot.springjsoncrypt.util.CipherUtils" scope="prototype">
+		<constructor-arg name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
+		<constructor-arg name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
+		<constructor-arg name="keyString" value="#{config_crypto['crypto.key']}"/>
+		<constructor-arg name="initialVector" value="#{config_crypto['crypto.initial.vector']}"/>	
+	</bean>
 	
-	<!-- JSON  -->	
-	<bean id="jacksonObjectMapper" class="com.fiadot.springjsoncrypt.json.CustomJacksonObjectMapper" />		
+	
+	<bean id="encJsonUnMarshaller" class="com.fiadot.springjsoncrypt.cipher.JsonDecryptUnMashaller">
+ 		<property name="mode" value="1001" />  
+		<property name="streamDriver">
+			<bean class="com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver" />
+		</property>
+		<property name="autodetectAnnotations" value="true" />
+
+ 		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
+		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
+		<property name="keyString" value="#{config_crypto['crypto.key']}"/>
+		<property name="initialVector" value="#{config_crypto['crypto.initial.vector']}"/>			
+	</bean>
+	
+	
+	
+	<bean id="JsonXstream" class="com.thoughtworks.xstream.XStream">
+		<constructor-arg name="hierarchicalStreamDriver">
+			<bean class="com.fiadot.springjsoncrypt.json.JsonMarshallerDriver" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="encJsonMarshaller" class="com.fiadot.springjsoncrypt.cipher.JsonEncryptMashaller">
+ 		<property name="mode" value="1001" /> 
+		<property name="streamDriver">
+			<bean class="com.fiadot.springjsoncrypt.json.JsonMarshallerDriver" />
+		</property>
+		<property name="xStream" ref="JsonXstream"/>
+		<property name="autodetectAnnotations" value="true" />
+	
+		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
+		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
+		<property name="keyString" value="#{config_crypto['crypto.key']}"/>
+		<property name="initialVector" value="#{config_crypto['crypto.initial.vector']}"/>			
 		
-	<bean id="jacksonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	</bean>
+	
+
+	
+
+	<!-- JSON ext  -->
+	<bean id="jsonextConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
 		<property name="supportedMediaTypes" >
 			<list>
-				<value>application/json</value>
+				<value>application/jsonext</value>
 			</list>
 		</property>
-		<property name="objectMapper" ref="jacksonObjectMapper" />
+		<property name="marshaller" ref="encJsonMarshaller" />
+		<property name="unmarshaller" ref="encJsonUnMarshaller" />
 	</bean>
 		
-		
-		
+				
 			
 	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
  	
@@ -65,8 +113,13 @@
 		</property>
 
 		<property name="messageConverters">
-			<list>				
-				<ref bean="jacksonConverter" />	 										
+			<list>									 		
+				<ref bean="jsonextConverter" />			
+					
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="writeAcceptCharset" value="false" />
+				</bean>
+											
 			</list>
 		</property>
 	</bean>
