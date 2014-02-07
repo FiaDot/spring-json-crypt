@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(produces= { "application/json", "application/crypto+json" } )
+// @RequestMapping(produces= { "application/json", "application/crypto+json" } )
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
