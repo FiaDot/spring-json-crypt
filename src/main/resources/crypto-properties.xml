@@ -5,6 +5,6 @@
 <entry key="crypto.comment">Crypto local</entry>
 <entry key="crypto.key.algorithm">AES</entry>
 <entry key="crypto.cipher.argorithm">AES/CBC/PKCS7Padding</entry>
-<entry key="crypto.key">2oGR5t0NCoewf2XEC85eyA==</entry>
-<entry key="crypto.initial.vector">keiGyA/DPwkpPjXKsgkAzg==</entry>
+<entry key="crypto.key">ls4h+XaXU+A5m72HRpwkeQ==</entry>
+<entry key="crypto.initial.vector">W46YspHuEiQlKDcLTqoySw==</entry>
 </properties>

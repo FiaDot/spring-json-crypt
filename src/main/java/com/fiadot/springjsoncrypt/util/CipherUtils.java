@@ -4,14 +4,20 @@ package com.fiadot.springjsoncrypt.util;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
-
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.security.Security;
+import java.util.Random;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+import org.apache.commons.codec.binary.Hex;
 
 public class CipherUtils {
 	
@@ -101,17 +107,41 @@ public class CipherUtils {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
 
+	
+	public static String get_random_enc_base64(int size) {
+		Random random = new Random();
+		byte[] randomBytes = new byte[size];
+		random.nextBytes(randomBytes);
+		
+		byte[] apacheBytes =  org.apache.commons.codec.binary.Base64.encodeBase64(randomBytes);
+        return new String(apacheBytes);
+	}
+	
+	
+	public static void main(String[] args) throws Exception {
+/*		
+		String PLAIN_KEY = "1234567890123456";
+		String PLAIN_IV = "1234567890123456";
+				
+        String KEY_STRING = get_random_enc_base64(16);
+        String INITIAL_VECTOR = get_random_enc_base64(16);
+
+		System.out.println("KEY_STRING=" + KEY_STRING);
+		System.out.println("INITIAL_VECTOR=" + INITIAL_VECTOR);
+*/		
+		
+		String KEY_STRING = "ls4h+XaXU+A5m72HRpwkeQ==";
+		String INITIAL_VECTOR = "W46YspHuEiQlKDcLTqoySw==";
+			
 		String KEY_ALGORITHM = "AES";
 		String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
-		String KEY_STRING = "2oGR5t0NCoewf2XEC85eyA==";
-		String INITIAL_VECTOR = "keiGyA/DPwkpPjXKsgkAzg==";
+			
 
-		String decStr = "{\"ReqDto\":{\"plain_data\":\"test\"}}";
-		String encStr = "SOut1EYWs4bO68w8RyFldGmS2Yft8kqPit2SVqST6IzJr9XnkTbv0OgNIayKkkFnj0GuLlOLBzt9Ko0BoaUfSg==";
+		String decStr = "{\"ReqDto\":{\"plain_data\":\"test\"}}";		
+		String encStr = "mkZC0LeBOiM234YglFAElK78DW1ll26fy7MBkQf/U5QSqzvvfMbtMNeU8v1f56pe";
 
-//		encStr=  "ryYxp3lhTassSxLlU7D7GUhb3O8JlfK4ywOjjPScmDaigmE0pUxcOICP3qH2Cvhn8xY8whlPXAhcCVoqGG+/S1F8Shc6fcT1d0lqG5u+ZCERjLydxm/bMlQj5gnEgqdR";
+				
 		CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING, INITIAL_VECTOR);
 		System.out.println(cu.encrypt(decStr));
 		System.out.println(cu.decrypt(encStr));
