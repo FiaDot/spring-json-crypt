@@ -12,7 +12,8 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd ">
 		
 	
-	
+
+
 	<!-- Import properties  -->
 	<util:properties id="config_crypto" location="classpath:crypto-properties.xml" />
 		
@@ -34,12 +35,7 @@
 	<context:component-scan base-package="com.fiadot.springjsoncrypt" />
 	
 
-	        
-	
-		
 	<!-- JSON  -->	
-	
-
 	<bean id="jacksonObjectMapper" class="com.fiadot.springjsoncrypt.json.CustomJacksonObjectMapper" />		
 		
 	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -50,50 +46,8 @@
 		</property>
 		<property name="objectMapper" ref="jacksonObjectMapper" />
 	</bean>
-	<!-- 	
-	<bean id="jsonMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
-		<property name="mode" value="1001" />  
-		<property name="streamDriver">
-			<bean class="com.fiadot.springjsoncrypt.json.JsonMarshallerDriver" />
-		</property>
-		<property name="autodetectAnnotations" value="true" />
-		
-		
-  		<property name="annotatedClasses">
-            <list>
-                <value>com.fiadot.springjsoncrypt.ReqDto</value>
-                <value>com.fiadot.springjsoncrypt.ResDto</value>
-            </list>
-        </property>
-	</bean>
-
-	<bean id="jsonUnMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
-		<property name="mode" value="1001" />
-		<property name="streamDriver">
-			<bean class="com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver" />
-		</property>
-		<property name="autodetectAnnotations" value="true" />
-		
-		
-  		<property name="annotatedClasses">
-            <list>
-                <value>com.fiadot.springjsoncrypt.ReqDto</value>
-                <value>com.fiadot.springjsoncrypt.ResDto</value>
-            </list>
-        </property>
-	</bean>
 	
 	
-	<bean id="jsonConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-		<property name="supportedMediaTypes" >
-			<list>
-				<value>application/json</value>
-			</list>
-		</property>
-		<property name="marshaller" ref="jsonUnMarshaller" />
-		<property name="unmarshaller" ref="jsonUnMarshaller" />
-	</bean>
-	 -->
 	
 	<!-- Crypt -->
 	<bean id="cryptoUtil" class="com.fiadot.springjsoncrypt.util.CipherUtils" scope="prototype">
@@ -105,6 +59,18 @@
 	
 	
 	
+
+	<bean id="dto_list" class="java.util.ArrayList">
+		<constructor-arg>
+	        <list>
+	              <value>com.fiadot.springjsoncrypt.ReqDto</value>
+	              <value>com.fiadot.springjsoncrypt.ResDto</value>
+	        </list>
+	   	</constructor-arg>     
+	</bean>
+
+	
+
 	<bean id="encJsonUnMarshaller" class="com.fiadot.springjsoncrypt.json.JsonDecryptUnMashaller">
  		<property name="mode" value="1001" />  
 		<property name="streamDriver">
@@ -112,14 +78,7 @@
 		</property>
 		<property name="autodetectAnnotations" value="true" />
   
-  		<property name="annotatedClasses">  		
-            <list>
-                <value>com.fiadot.springjsoncrypt.ReqDto</value>
-                <value>com.fiadot.springjsoncrypt.ResDto</value>
-            </list>            
-        </property>
-         
-      
+  		<property name="annotatedClasses" ref="dto_list" />
         
  		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
 		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
@@ -143,14 +102,16 @@
 		<property name="xStream" ref="JsonXstream"/>
 		<property name="autodetectAnnotations" value="true" />
 	
-          
+		<property name="annotatedClasses" ref="dto_list" />
+<!--           
   		<property name="annotatedClasses">
             <list>
                 <value>com.fiadot.springjsoncrypt.ReqDto</value>
                 <value>com.fiadot.springjsoncrypt.ResDto</value>
             </list>
         </property>
-        
+ -->        
+            
 		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
 		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
 		<property name="keyString" value="#{config_crypto['crypto.key']}"/>
@@ -192,7 +153,6 @@
 
 		<property name="messageConverters">
 			<list>
-			
 				<ref bean="jsonextConverter" />
 				<ref bean="jsonConverter" />	
 				
