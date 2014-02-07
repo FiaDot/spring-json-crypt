@@ -35,6 +35,65 @@
 	
 	
 	
+		
+	<!-- JSON  -->	
+	
+<!-- 	
+	<bean id="jacksonObjectMapper" class="com.fiadot.springjsoncrypt.json.CustomJacksonObjectMapper" />		
+		
+	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes" >
+			<list>
+				<value>application/json</value>
+			</list>
+		</property>
+		<property name="objectMapper" ref="jacksonObjectMapper" />
+	</bean>
+ -->	
+	<bean id="jsonMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+		<property name="mode" value="1001" />  <!-- NO_REFERENCES -->
+		<property name="streamDriver">
+			<bean class="com.fiadot.springjsoncrypt.json.JsonMarshallerDriver" />
+		</property>
+		<property name="autodetectAnnotations" value="true" />
+		
+		
+  		<property name="annotatedClasses">
+            <list>
+                <value>com.fiadot.springjsoncrypt.ReqDto</value>
+                <value>com.fiadot.springjsoncrypt.ResDto</value>
+            </list>
+        </property>
+	</bean>
+
+	<bean id="jsonUnMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+		<property name="mode" value="1001" />
+		<property name="streamDriver">
+			<bean class="com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver" />
+		</property>
+		<property name="autodetectAnnotations" value="true" />
+		
+		
+  		<property name="annotatedClasses">
+            <list>
+                <value>com.fiadot.springjsoncrypt.ReqDto</value>
+                <value>com.fiadot.springjsoncrypt.ResDto</value>
+            </list>
+        </property>
+	</bean>
+	
+	
+		<bean id="jsonConverter"
+		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<property name="supportedMediaTypes" >
+			<list>
+				<value>application/json</value>
+			</list>
+		</property>
+		<property name="marshaller" ref="jsonMarshaller" />
+		<property name="unmarshaller" ref="jsonUnMarshaller" />
+	</bean>
+	
 	
 	<!-- Crypt -->
 	<bean id="cryptoUtil" class="com.fiadot.springjsoncrypt.util.CipherUtils" scope="prototype">
@@ -81,6 +140,13 @@
 		<property name="xStream" ref="JsonXstream"/>
 		<property name="autodetectAnnotations" value="true" />
 	
+          
+  		<property name="annotatedClasses">
+            <list>
+                <value>com.fiadot.springjsoncrypt.ReqDto</value>
+                <value>com.fiadot.springjsoncrypt.ResDto</value>
+            </list>
+        </property>
         
 		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
 		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
@@ -106,12 +172,39 @@
 	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
  	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-		<property name="order" value="1" />
+		<property name="order" value="0" />
 		<property name="alwaysUseFullPath" value="true" />
 	</bean>
 		
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!--property name="converters"> <list> <ref bean="jodaISO8601DateConverter" 
+			/> </list> </property -->
+	</bean>
+	
+	<bean id="conversionServiceExposingInterceptor"
+		class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+		<constructor-arg ref="conversionService" />
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="conversionServiceExposingInterceptor" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	
+	
 		
-		
+	<bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+		<constructor-arg>
+			<ref local="messageSource" />
+		</constructor-arg>
+	</bean>
+	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		
 		<property name="alwaysUseFullPath" value="true" />
@@ -123,17 +216,23 @@
 		</property>
 
 		<property name="messageConverters">
-			<list>					
-				<ref bean="jsonConverter" />	 				 		
-				<ref bean="jsonextConverter" />			
+			<list>
+				<ref bean="jsonextConverter" />
+				<ref bean="jsonConverter" />	 			
 					
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
 					<property name="writeAcceptCharset" value="false" />
 				</bean>
 											
+				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />		
 			</list>
 		</property>
 	</bean>
+	
+
 	
 	
 </beans>
