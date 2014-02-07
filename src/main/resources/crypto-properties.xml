@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Crypto</comment>
+<entry key="crypto.comment">Crypto local</entry>
+<entry key="crypto.key.algorithm">AES</entry>
+<entry key="crypto.cipher.argorithm">AES/CBC/PKCS7Padding</entry>
+<entry key="crypto.key">ls4h+XaXU+A5m72HRpwkeQ==</entry>
+<entry key="crypto.initial.vector">W46YspHuEiQlKDcLTqoySw==</entry>
+</properties>
