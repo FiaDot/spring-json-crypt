@@ -109,12 +109,11 @@ public class CipherUtils {
 		String INITIAL_VECTOR = "keiGyA/DPwkpPjXKsgkAzg==";
 
 		String decStr = "{\"ReqDto\":{\"plain_data\":\"test\"}}";
-//		String decStr = "{\"loginReq\":{accessToken:\"4828288382\", deviceId: \"1234567890123456789012345678901234567890123456789012345678901234\", channelCd: \"002\", userId:\"12345678901234567\"}}";
-		String encStr = "S14k/ReOPqV8rnKgNd0sPKvfVTsl0qwPZ5jf5g56E1jmyeSEm9Mly3YYLiqd9T70LJjQGy2eplN9wEFILHZK3z5Jzx5p6jFyoa7jCjVL1q1mxz5U /xRSG4XP1riXmQytBqMt1QhtBGOVCj4ZkSr1R2AB4jIfDL6pVQ3o 8/WQo=";
-		encStr = "24cM+cYInHO83Fzsc0EfLR1jT8kn9shtjNxCa/5egzy3AXWhONBpCKtERveHNm+4";
+		String encStr = "SOut1EYWs4bO68w8RyFldGmS2Yft8kqPit2SVqST6IzJr9XnkTbv0OgNIayKkkFnj0GuLlOLBzt9Ko0BoaUfSg==";
+
+//		encStr=  "ryYxp3lhTassSxLlU7D7GUhb3O8JlfK4ywOjjPScmDaigmE0pUxcOICP3qH2Cvhn8xY8whlPXAhcCVoqGG+/S1F8Shc6fcT1d0lqG5u+ZCERjLydxm/bMlQj5gnEgqdR";
 		CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING, INITIAL_VECTOR);
 		System.out.println(cu.encrypt(decStr));
 		System.out.println(cu.decrypt(encStr));
-		// System.out.println(cu.decrypt(source);
 	}
 }

@@ -12,6 +12,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd ">
 		
 	
+	
 	<!-- Import properties  -->
 	<util:properties id="config_crypto" location="classpath:crypto-properties.xml" />
 		
@@ -32,6 +33,9 @@
 	
 	<context:component-scan base-package="com.fiadot.springjsoncrypt" />
 	
+	
+	
+	
 	<!-- Crypt -->
 	<bean id="cryptoUtil" class="com.fiadot.springjsoncrypt.util.CipherUtils" scope="prototype">
 		<constructor-arg name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
@@ -41,13 +45,20 @@
 	</bean>
 	
 	
-	<bean id="encJsonUnMarshaller" class="com.fiadot.springjsoncrypt.cipher.JsonDecryptUnMashaller">
+	<bean id="encJsonUnMarshaller" class="com.fiadot.springjsoncrypt.json.JsonDecryptUnMashaller">
  		<property name="mode" value="1001" />  
 		<property name="streamDriver">
 			<bean class="com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver" />
 		</property>
 		<property name="autodetectAnnotations" value="true" />
-
+  
+  		<property name="annotatedClasses">
+            <list>
+                <value>com.fiadot.springjsoncrypt.ReqDto</value>
+                <value>com.fiadot.springjsoncrypt.ResDto</value>
+            </list>
+        </property>
+        
  		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
 		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
 		<property name="keyString" value="#{config_crypto['crypto.key']}"/>
@@ -62,7 +73,7 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="encJsonMarshaller" class="com.fiadot.springjsoncrypt.cipher.JsonEncryptMashaller">
+	<bean id="encJsonMarshaller" class="com.fiadot.springjsoncrypt.json.JsonEncryptMashaller">
  		<property name="mode" value="1001" /> 
 		<property name="streamDriver">
 			<bean class="com.fiadot.springjsoncrypt.json.JsonMarshallerDriver" />
@@ -70,14 +81,13 @@
 		<property name="xStream" ref="JsonXstream"/>
 		<property name="autodetectAnnotations" value="true" />
 	
+        
 		<property name="keyAlgorithm" value="#{config_crypto['crypto.key.algorithm']}"/>
 		<property name="cipherAlgorithm" value="#{config_crypto['crypto.cipher.argorithm']}"/>
 		<property name="keyString" value="#{config_crypto['crypto.key']}"/>
 		<property name="initialVector" value="#{config_crypto['crypto.initial.vector']}"/>			
 		
 	</bean>
-	
-
 	
 
 	<!-- JSON ext  -->
@@ -91,8 +101,8 @@
 		<property name="unmarshaller" ref="encJsonUnMarshaller" />
 	</bean>
 		
-				
-			
+
+
 	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
  	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
@@ -123,8 +133,6 @@
 			</list>
 		</property>
 	</bean>
-	
-	
 	
 	
 </beans>

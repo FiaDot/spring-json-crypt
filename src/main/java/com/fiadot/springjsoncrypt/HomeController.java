@@ -44,11 +44,12 @@ public class HomeController {
 	
 	@RequestMapping(value="/enc", method=RequestMethod.POST)
 	@ResponseBody
-	public ResDto	encprypt(@RequestBody ReqDto req) {		
+	public ResDto	encprypt(@RequestBody ReqDto req) {
+		logger.warn("REQ=" + req.getPlain_data());
+		
 		ResDto res = new ResDto();
 		
-//		res.setEncrypted_data(encrypted_data);
-		
+//		res.setEncrypted_data(encrypted_data);				
 		res.setEncrypted_data("Not implementation, yet.");
 		return res;		
 	}
