@@ -110,23 +110,27 @@ public class HomeControllerTest {
 									.andExpect(status().isOk())
 									.andReturn();
     	
+    	// TODO : inputStream flush!!
     	String str_res = result.getResponse().getContentAsString();    	
-    	logger.info("ENC RES=" + str_res);
-        	
+    	logger.info("ResponseBody encoded res=" + str_res);
     	
+    	assertNotNull(str_res);
+
 		String KEY_STRING = "ls4h+XaXU+A5m72HRpwkeQ==";
 		String INITIAL_VECTOR = "W46YspHuEiQlKDcLTqoySw==";
-			
+
 		String KEY_ALGORITHM = "AES";
 		String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
-			
+
 				
 		CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING, INITIAL_VECTOR);
 		
-		String plain_str = cu.decrypt(str_res);
-		logger.info("PLAIN RES=" + plain_str);
+		// TODO : flush!!!
 		
-		assertTrue(plain_str.contains("implementation"));		
+		String plain_str = cu.decrypt(str_res);
+		logger.info("ResponseBody plain res=" + plain_str);
+		
+		assertTrue("not found matched res", plain_str.contains("implementation"));				
     }   
     
 }

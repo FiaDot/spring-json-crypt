@@ -91,6 +91,8 @@ public class CipherUtils {
 	}
 
 	public String decrypt(String encryptedData) throws Exception {
+		
+		logger.info("CipherUtils:decrypt() raw=" + encryptedData);
 		if (encryptedData == null) {
 			return null;
 		}

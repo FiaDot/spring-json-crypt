@@ -286,17 +286,21 @@ public class CryptMappingJacson2HttpMessageConverter extends AbstractHttpMessage
 				jsonGenerator.writeRaw(this.jsonPrefix);
 			}
 
-			this.objectMapper.writeValue(jsonGenerator, object);
 			
+			// jsonGenerator.
+			//this.objectMapper.writeValue(jsonGenerator, object);
+
 			CipherEncryptUtils cryptoUtil = new CipherEncryptUtils("AES",  "AES/CBC/PKCS7Padding",  "ls4h+XaXU+A5m72HRpwkeQ==",  "W46YspHuEiQlKDcLTqoySw==");
 			String encStr = null;
 			try {
 				encStr = cryptoUtil.encrypt(this.objectMapper.writeValueAsString(object));
+				logger.info("MessageMapper::WriteInternal() encStr=" + encStr);
 			} catch (Exception e) {
 			
 			}
 			
 			outputMessage.getBody().write(encStr.getBytes());
+			// outputMessage.getBody().flush();
 		}
 		catch (JsonProcessingException ex) {
 			throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
