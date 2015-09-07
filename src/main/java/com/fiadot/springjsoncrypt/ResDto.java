@@ -2,7 +2,7 @@ package com.fiadot.springjsoncrypt;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-// ¹Ø¿¡ ¾ÈºÙ¿© ÁÖ¸é com... ÀüºÎ ºÙ¾î¼­ fullnameÀÌ µé¾î°£´Ù
+// ï¿½Ø¿ï¿½ ï¿½ÈºÙ¿ï¿½ ï¿½Ö¸ï¿½ com... ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾î¼­ fullnameï¿½ï¿½ ï¿½ï¿½î°£ï¿½ï¿½
 @XStreamAlias("ResDto")
 public class ResDto {	
 	private String encrypted_data;

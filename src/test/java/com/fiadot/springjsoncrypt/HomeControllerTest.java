@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fiadot.springjsoncrypt.json.JsonIntegration;
 import com.fiadot.springjsoncrypt.util.CipherUtils;
 
 
@@ -40,7 +41,7 @@ public class HomeControllerTest {
     }
     
     
-    // Accept: application/json, application/crypto ¹Ýµå½Ã Ãß°¡ ÇØ¾ß ÇÔ!
+    // Accept: application/json, application/crypto ï¿½Ýµï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ø¾ï¿½ ï¿½ï¿½!
     
     @Test
     public void plain_test() throws Exception {
@@ -62,16 +63,50 @@ public class HomeControllerTest {
     }       	
     
     
+    @Test
+    public void plain_to_encode() throws Exception {
+    	ReqDto req = new ReqDto();
+    	req.setPlain_data("test");
+    	
+    	 
+    	// String plain = "{\"ReqDto\":\"plain_data\":\"test\"}}";
+    	String plain = JsonIntegration.convert_obj_to_json(req);
+    	
+    	String KEY_STRING = "ls4h+XaXU+A5m72HRpwkeQ==";
+		String INITIAL_VECTOR = "W46YspHuEiQlKDcLTqoySw==";	
+		String KEY_ALGORITHM = "AES";
+		String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
+				
+		CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING, INITIAL_VECTOR);
+		
+		String encoded = cu.encrypt(plain);
+		logger.info("Plain=" + plain);
+		logger.info("Encoded=" + encoded);
+		
+		
+		String decoded = cu.decrypt(encoded);
+		logger.info("Decoded=" + decoded);
+		
+    }	
+    
     
     @Test
     public void enc_test() throws Exception {
+    	//ReqDto req = new ReqDto();
+    	//req.setPlain_data("test");
+    	//String plain_str = JsonIntegration.convert_obj_to_json(req);
     	
-		String encStr = "mkZC0LeBOiM234YglFAElK78DW1ll26fy7MBkQf/U5QSqzvvfMbtMNeU8v1f56pe";
+    	String encStr = "mkZC0LeBOiM234YglFAElK78DW1ll26fy7MBkQf/U5QSqzvvfMbtMNeU8v1f56pe";
+    	
+		// String encStr = "7et2NQNpDldp2+cUJoTgAvaz6kC2EOFKKw8681M0hBs=";
+		// "mkZC0LeBOiM234YglFAElK78DW1ll26fy7MBkQf/U5QSqzvvfMbtMNeU8v1f56pe";
 
     	MvcResult result = mockMvc.perform(post("/enc")																			
-											.header("Accept", "application/crypto")
-											.header("Content-Type", "application/crypto")											
-											.content(encStr))                   
+    			.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				//.header("Accept", "application/crypto")
+				//							.header("Content-Type", "application/crypto")											
+									.content(encStr))                   
 									.andExpect(status().isOk())
 									.andReturn();
     	

@@ -95,7 +95,7 @@ public class JsonEncryptMashaller extends XStreamMarshaller {
 		}
 
 		@Override
-		protected void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
+		public void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
 			
 			if (this.xStream != null) {
 				try{

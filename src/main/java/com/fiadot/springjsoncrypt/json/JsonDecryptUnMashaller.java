@@ -58,7 +58,7 @@ public class JsonDecryptUnMashaller extends XStreamMarshaller {
 
 	// Unmarshalling
 	@Override
-	protected Object unmarshalReader(Reader reader) throws XmlMappingException,
+	public Object unmarshalReader(Reader reader) throws XmlMappingException,
 			IOException {
 		if (streamDriver != null) {
 			try {

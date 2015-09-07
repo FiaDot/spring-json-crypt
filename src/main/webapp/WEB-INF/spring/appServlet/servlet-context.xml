@@ -38,7 +38,7 @@
 	<!-- JSON  -->	
 	<bean id="jacksonObjectMapper" class="com.fiadot.springjsoncrypt.json.CustomJacksonObjectMapper" />		
 		
-	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	<bean id="jsonConverter" class="com.fiadot.springjsoncrypt.json.CryptMappingJacson2HttpMessageConverter">
 		<property name="supportedMediaTypes" >
 			<list>
 				<value>application/json</value>
@@ -153,7 +153,6 @@
 
 		<property name="messageConverters">
 			<list>
-				<ref bean="jsonextConverter" />
 				<ref bean="jsonConverter" />	
 				
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
