@@ -286,7 +286,7 @@ public class CryptMappingJacson2HttpMessageConverter extends AbstractHttpMessage
 				jsonGenerator.writeRaw(this.jsonPrefix);
 			}
 
-			
+			// original source
 			// jsonGenerator.
 			//this.objectMapper.writeValue(jsonGenerator, object);
 
@@ -300,7 +300,6 @@ public class CryptMappingJacson2HttpMessageConverter extends AbstractHttpMessage
 			}
 			
 			outputMessage.getBody().write(encStr.getBytes());
-			// outputMessage.getBody().flush();
 		}
 		catch (JsonProcessingException ex) {
 			throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);

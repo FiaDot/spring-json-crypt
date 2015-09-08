@@ -102,10 +102,10 @@ public class HomeControllerTest {
 		// "mkZC0LeBOiM234YglFAElK78DW1ll26fy7MBkQf/U5QSqzvvfMbtMNeU8v1f56pe";
 
     	MvcResult result = mockMvc.perform(post("/enc")																			
-    			.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				//.header("Accept", "application/crypto")
-				//							.header("Content-Type", "application/crypto")											
+    			//.contentType(MediaType.APPLICATION_JSON)
+				//.accept(MediaType.APPLICATION_JSON)
+				.header("Accept", "application/crypto")
+								.header("Content-Type", "application/crypto")											
 									.content(encStr))                   
 									.andExpect(status().isOk())
 									.andReturn();
@@ -124,8 +124,6 @@ public class HomeControllerTest {
 
 				
 		CipherUtils cu = new CipherUtils(KEY_ALGORITHM, CIPHER_ALGORITHM, KEY_STRING, INITIAL_VECTOR);
-		
-		// TODO : flush!!!
 		
 		String plain_str = cu.decrypt(str_res);
 		logger.info("ResponseBody plain res=" + plain_str);

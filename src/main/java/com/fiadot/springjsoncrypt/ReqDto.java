@@ -1,7 +1,7 @@
 package com.fiadot.springjsoncrypt;
 
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+// import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 // @XStreamAlias("ReqDto")
 public class ReqDto  {

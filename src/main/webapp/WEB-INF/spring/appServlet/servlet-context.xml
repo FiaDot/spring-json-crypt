@@ -41,7 +41,7 @@
 	<bean id="jsonConverter" class="com.fiadot.springjsoncrypt.json.CryptMappingJacson2HttpMessageConverter">
 		<property name="supportedMediaTypes" >
 			<list>
-				<value>application/json</value>
+				<value>application/crypto</value>
 			</list>
 		</property>
 		<property name="objectMapper" ref="jacksonObjectMapper" />
